@@ -1389,6 +1389,11 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
+lexical@0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/lexical/-/lexical-0.9.1.tgz#0e8a3df9e3d4cb8399b39a52693cc0251620ed82"
+  integrity sha512-I7m8u717rqjdGZaRCZ3/EW+IwJWA78nX2kaTYQyua6mLlFDvcnHtX1bFXDZA+flNpPcnAuaI8HMA4xgajdFgHw==
+
 locate-path@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-6.0.0.tgz#55321eb309febbc59c4801d931a72452a681d286"
