@@ -80,3 +80,37 @@
 .read-the-docs {
   color: #888;
 }
+
+.ltr {
+  text-align: left;
+}
+
+.rtl {
+  text-align: right;
+}
+
+.editor-oce {
+  position: relative;
+  text-align: left;
+}
+
+.contentEditable {
+  width: 80vw;
+  min-height: 40em;
+  padding: 0 8px;
+}
+
+.placeholder {
+  color: #999;
+  overflow: hidden;
+  position: absolute;
+  top: 0px;
+  padding-left: 8px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.editor-paragraph {
+  margin: 0 0 15px 0;
+  position: relative;
+}

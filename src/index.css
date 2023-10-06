@@ -68,3 +68,25 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+span.verses::before,
+span.chapter::before {
+  content: attr(data-atts-number);
+  position: relative;
+  visibility: visible;
+  display: inline-flex;
+  color: rgb(242 242 242);
+}
+
+[data-type] {
+  color: #f4ff93;
+}
+
+[data-type="graft"] {
+  display: inline-block;
+  border: 1px solid orange;
+}
+
+[data-type="paragraph"] {
+  color: #cbffcf;
+}
