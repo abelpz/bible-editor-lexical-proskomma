@@ -18,7 +18,7 @@ import {
   SectionMarkNode,
 } from "./libraries/nodes/SectionMarkNode.js";
 
-import { $getRoot } from "lexical";
+import { $getRoot, $getSelection } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 import "./App.css";
@@ -38,15 +38,6 @@ const perf = usfm2perf(usfmText, {
   languageCode: "en",
   versionId: "ult",
 });
-
-// console.log({ perf });
-
-// const convertedPerf = convertPerf({
-//   perfDocument: perf,
-//   nodeCreator: (props) => props,
-// });
-
-// console.log({ convertedPerf });
 
 const bibleHandler = new EpiteleteHtml({
   docSetId: perf.metadata.translation.id,
@@ -74,17 +65,24 @@ function App() {
     useEffect(() => {
       return editor.registerUpdateListener((listener) => {
         const retObj = {};
+        console.log({
+          changed: listener.prevEditorState === listener.editorState,
+        });
+
         listener.prevEditorState.read(
           () => (retObj.prevText = $getRoot()?.__cachedText),
         );
         listener.editorState.read(() => {
+          console.log({ listener });
           console.log({
-            text: Object.fromEntries(editor.getEditorState()._nodeMap),
-            state: JSON.stringify(editor.getEditorState()),
+            state: JSON.parse(JSON.stringify(editor.getEditorState())),
+            ...((selection) => ({
+              selection,
+              node: selection?.focus.getNode(),
+            }))($getSelection()),
           });
           return (retObj.curText = $getRoot()?.__cachedText);
         });
-        // setTextCache(retObj.curText);
       });
     }, [editor]);
 

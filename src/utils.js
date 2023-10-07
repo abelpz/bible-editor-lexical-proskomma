@@ -57,7 +57,9 @@ export const usfm2perf = (
   return perf;
 };
 
-/** a functions that allows easier mapping of PERF */
+/** Maps types and subtypes of a PERF element (sequence,block, contentElement)
+ * given map object (perfMap) and returns a transformation of that element.
+ */
 export const mapPerf = ({ props, path, children, defaults, perfMap }) => {
   const { type, subtype } = props;
 
@@ -90,19 +92,27 @@ export const transformPerfToLexicalState = (perf, sequenceId) => ({
   }),
 });
 
+/**
+ * Converts a PERF element to a different format
+ */
 export const customNodeBuilder = ({ props, children, path, perfDocument }) =>
   mapPerf({
     props,
     path,
     children,
-    perfMap: buildPerfMap(perfDocument),
+    perfMap: buildPerfToLexicalMap(perfDocument),
   });
 
-export const buildPerfMap = (perf) =>
+/**
+ * builds an object (perfMap) which maps perf elements by their type and subtype
+ * this is needed for mapPerf() to assign a transformation
+ * to a type/subtype combination.
+ */
+export const buildPerfToLexicalMap = (perf) =>
   ((context) => ({
     "*": {
       "*": ({ children, props: perfElementProps }) => {
-        console.log("NOT SUPPORTED", { perfElementProps });
+        // console.log("NOT SUPPORTED", { perfElementProps, children });
         return children?.length
           ? {
               data: perfElementProps,
@@ -184,6 +194,11 @@ export const buildPerfMap = (perf) =>
           transformPerfToLexicalState(perf, perfElementProps.target),
         ),
         data: perfElementProps,
+        tag: ((subtypeMap) => subtypeMap[perfElementProps.subtype])({
+          title: "h1",
+          introduction: "section",
+          heading: "div",
+        }),
         attributes: getAttributesFromPerfElementProps(perfElementProps),
         direction: "ltr",
         format: "",
@@ -196,11 +211,30 @@ export const buildPerfMap = (perf) =>
       "*": ({ props: perfElementProps, children }) => ({
         children: children,
         data: perfElementProps,
+        tag: getTagFromSubtype({
+          subtype: perfElementProps.subtype,
+          replacementMap: {
+            "\\w?mt(\\d*)$": "span",
+            s: "h3",
+            r: "strong",
+            f: "span",
+          },
+        }),
         attributes: getAttributesFromPerfElementProps(perfElementProps),
         direction: "ltr",
         format: "",
         indent: 0,
         type: "usfmparagraph",
+        version: 1,
+      }),
+      x: ({ children, props: perfElementProps }) => ({
+        children,
+        data: perfElementProps,
+        attributes: getAttributesFromPerfElementProps(perfElementProps),
+        direction: "ltr",
+        format: "",
+        indent: 0,
+        type: "inline",
         version: 1,
       }),
     },
@@ -258,3 +292,15 @@ const getAttributesFromPerfElementProps = ({ metaContent, ...data }) =>
     atts[`data-${dataKey}`] = data[dataKey];
     return atts;
   }, {});
+
+const getTagFromSubtype = ({ subtype, replacementMap }) =>
+  replacementMap[subtype] ??
+  ((matchedSubtype) =>
+    matchedSubtype
+      ? subtype.replace(
+          new RegExp(matchedSubtype),
+          replacementMap[matchedSubtype],
+        )
+      : undefined)(
+    Object.keys(replacementMap).find((key) => subtype.match(key)),
+  );

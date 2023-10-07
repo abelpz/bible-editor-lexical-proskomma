@@ -8,18 +8,21 @@ export class UsfmParagraphNode extends UsfmElementNode {
   }
 
   static clone(node) {
-    return new UsfmParagraphNode(node.__attributes, node.__data, node.__key);
+    return new UsfmParagraphNode(
+      node.__attributes,
+      node.__data,
+      node.__tag,
+      node.__key,
+    );
   }
 
-  constructor(attributes, data, key) {
-    super(attributes, data, key);
+  constructor(attributes, data, tag, key) {
+    super(attributes, data, tag || "p", key);
   }
 
   static importJSON(serializedNode) {
-    const { data, attributes, format, indent, direction } = serializedNode;
-    const node = $createUsfmParagraphNode(attributes, data);
-    node.setData(data);
-    node.setAttributes(attributes);
+    const { data, attributes, tag, format, indent, direction } = serializedNode;
+    const node = $createUsfmParagraphNode(attributes, data, tag);
     node.setFormat(format);
     node.setIndent(indent);
     node.setDirection(direction);
@@ -27,8 +30,8 @@ export class UsfmParagraphNode extends UsfmElementNode {
   }
 
   createDOM(config) {
-    const element = document.createElement("p");
     const attributes = this.getAttributes() || {};
+    const element = document.createElement(this.getTag());
     Object.keys(attributes).forEach((attKey) => {
       element.setAttribute(attKey, attributes[attKey]);
     });
@@ -54,8 +57,8 @@ export class UsfmParagraphNode extends UsfmElementNode {
   }
 }
 
-export function $createUsfmParagraphNode(attributes, data) {
-  return $applyNodeReplacement(new UsfmParagraphNode(attributes, data));
+export function $createUsfmParagraphNode(attributes, data, tag) {
+  return $applyNodeReplacement(new UsfmParagraphNode(attributes, data, tag));
 }
 
 export function $isUsfmParagraphNode(node) {

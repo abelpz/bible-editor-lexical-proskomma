@@ -53,6 +53,7 @@ export default function Editor() {
         placeholder={<div className="placeholder">Enter some text...</div>}
         ErrorBoundary={LexicalErrorBoundary}
       />
+
       {/* <AutoSectionMarkPlugin />
       <SectionMarkPlugin />
       {isEditable && <ClickableSectionMarkPlugin />}

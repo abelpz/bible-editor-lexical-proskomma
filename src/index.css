@@ -1,5 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap");
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Lora", serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -56,7 +57,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -67,7 +68,7 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
 
 span.verses::before,
 span.chapter::before {
@@ -78,15 +79,94 @@ span.chapter::before {
   color: rgb(242 242 242);
 }
 
+span.chapter::before {
+  font-size: 1.7rem;
+  vertical-align: text-top;
+  font-weight: 700;
+  margin-inline-end: 0.1em;
+}
+
+span.verses::before {
+  color: #fff;
+  font-size: 0.8em;
+  vertical-align: sup;
+  font-weight: 600;
+  margin-inline-end: 0.1em;
+}
+
+/* Styles for inspecting nodes */
 [data-type] {
+  position: relative;
   color: #f4ff93;
+  box-sizing: border-box;
+  border: 1px dashed transparent;
+}
+
+[data-type]:hover {
+  border-color: rgb(80, 80, 80);
+}
+
+[data-type]:hover:after {
+  font-size: 0.8rem;
+  content: attr(data-type) "/" attr(data-subtype);
+  position: absolute;
+  width: max-content;
+  background-color: #00000093;
+  top: 0;
+  right: 0;
+  opacity: 1;
 }
 
 [data-type="graft"] {
-  display: inline-block;
-  border: 1px solid orange;
+  padding: 0.1em;
+  margin: 0.25em 0em;
+}
+
+[data-type="graft"][data-subtype="title"] {
+  width: 100%;
+  text-align: center;
+}
+
+[data-type="graft"][data-subtype="heading"] {
+  width: 100%;
+  text-align: center;
 }
 
 [data-type="paragraph"] {
-  color: #cbffcf;
+  color: #faffca;
+  /* text-decoration: underline 2px wavy #f4ff93; */
+}
+
+[data-subtype="mt2"] {
+  font-style: italic;
+  font-size: 0.6em;
+  font-weight: 400;
+}
+
+[data-subtype="mt"],
+[data-subtype="mt1"] {
+  font-weight: 700;
+}
+
+h1 span[data-type="paragraph"] {
+  display: block;
+}
+
+p[data-type="paragraph"] {
+  color: rgba(255, 255, 255, 0.87);
+  text-align: justify;
+}
+
+[data-subtype="introduction"] [data-subtype="title"] {
+  font-size: 1.5rem;
+}
+
+[data-subtype="imt3"] {
+  font-size: 0.8em;
+}
+
+[data-type]:hover [data-type="graft"],
+.contentEditable:hover > [data-type="graft"] {
+  border: 1px dashed #747bff;
+  background-color: #0000001a;
 }
