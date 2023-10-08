@@ -65,30 +65,32 @@ function App() {
     const [editor] = useLexicalComposerContext();
     useEffect(() => {
       return editor.registerUpdateListener((listener) => {
-        const retObj = {};
-        console.log({
-          changed: listener.prevEditorState === listener.editorState,
-        });
+        const getPerfFromNode = () =>
+          transformLexicalStateToPerf(
+            JSON.parse(JSON.stringify(listener.editorState)),
+          );
 
-        listener.prevEditorState.read(
-          () => (retObj.prevText = $getRoot()?.__cachedText),
-        );
-        listener.editorState.read(() => {
-          console.log({ listener });
-          console.log({
-            state: JSON.parse(JSON.stringify(editor.getEditorState())),
-            ...((selection) => ({
-              selection,
-              node: selection?.focus.getNode(),
-            }))($getSelection()),
+        if (listener.dirtyElements.size > 0) {
+          console.log("DIRTY ELEMENTS", {
+            newPerf: getPerfFromNode(),
+            dirtyElements: listener.dirtyElements,
           });
-          console.log({
-            newPerf: transformLexicalStateToPerf(
-              JSON.parse(JSON.stringify(editor.getEditorState())),
-            ),
+          for (const [nodeKey] of listener.dirtyElements) {
+            const node = listener.editorState._nodeMap.get(nodeKey);
+            const path = node?.__data?.path;
+            if (path) console.log("node with path changed", { path, node });
+          }
+        }
+        if (listener.dirtyLeaves.size > 0) {
+          console.log("DIRTY LEAVES", {
+            newPerf: getPerfFromNode(),
+            dirtyLeaves: listener.dirtyLeaves,
           });
-          return (retObj.curText = $getRoot()?.__cachedText);
-        });
+          for (const nodeKey of listener.dirtyLeaves) {
+            const node = listener.editorState._nodeMap.get(nodeKey);
+            console.log({ node });
+          }
+        }
       });
     }, [editor]);
 
