@@ -1,6 +1,7 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { usfmText } from "./data/tit.usfm";
 import { usfm2perf, transformPerfToLexicalState } from "./utils.js";
+import { transformLexicalStateToPerf } from "./libraries/epitelete-lexical/lexicalConverter.js";
 import EpiteleteHtml from "epitelete-html";
 import { WrapperNode } from "./libraries/nodes/WrapperNode.js";
 // import { DivisionNode } from "./libraries/nodes/DivisionNode.js";
@@ -80,6 +81,11 @@ function App() {
               selection,
               node: selection?.focus.getNode(),
             }))($getSelection()),
+          });
+          console.log({
+            newPerf: transformLexicalStateToPerf(
+              JSON.parse(JSON.stringify(editor.getEditorState())),
+            ),
           });
           return (retObj.curText = $getRoot()?.__cachedText);
         });

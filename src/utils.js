@@ -60,27 +60,24 @@ export const usfm2perf = (
 /** Maps types and subtypes of a PERF element (sequence,block, contentElement)
  * given map object (perfMap) and returns a transformation of that element.
  */
-export const mapPerf = ({ props, path, children, defaults, perfMap }) => {
+export const mapPerf = ({ props, path, children, kind, defaults, perfMap }) => {
   const { type, subtype } = props;
+  const _props = { ...props, kind, path };
+  const _defaults = defaults ?? { props: _props, children };
 
-  if (!perfMap) return defaults ? defaults : { props, path, children };
+  if (!perfMap) return _defaults;
 
   const maps = [
-    perfMap["*"]?.["*"],
-    perfMap[type]?.["*"],
-    perfMap["*"]?.[subtype],
     perfMap[type]?.[subtype],
+    perfMap["*"]?.[subtype],
+    perfMap[type]?.["*"],
+    perfMap["*"]?.["*"],
   ];
 
-  return maps.reduce(
-    (_result, map) =>
-      ((mapExists) =>
-        mapExists
-          ? typeof map === "function"
-            ? map({ props, path, children })
-            : map
-          : _result)(map !== undefined),
-    {},
+  return (
+    ((map) => (typeof map === "function" ? map(_defaults) : map))(
+      maps.find((map) => map !== undefined),
+    ) ?? _defaults
   );
 };
 
@@ -95,9 +92,16 @@ export const transformPerfToLexicalState = (perf, sequenceId) => ({
 /**
  * Converts a PERF element to a different format
  */
-export const customNodeBuilder = ({ props, children, path, perfDocument }) =>
+export const customNodeBuilder = ({
+  props,
+  children,
+  path,
+  kind,
+  perfDocument,
+}) =>
   mapPerf({
     props,
+    kind,
     path,
     children,
     perfMap: buildPerfToLexicalMap(perfDocument),
@@ -112,7 +116,7 @@ export const buildPerfToLexicalMap = (perf) =>
   ((context) => ({
     "*": {
       "*": ({ children, props: perfElementProps }) => {
-        // console.log("NOT SUPPORTED", { perfElementProps, children });
+        console.log("NOT SUPPORTED", { perfElementProps, children });
         return children?.length
           ? {
               data: perfElementProps,
