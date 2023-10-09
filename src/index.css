@@ -111,9 +111,10 @@ span.verses::before {
   content: attr(data-type) "/" attr(data-subtype);
   position: absolute;
   width: max-content;
-  background-color: #00000093;
-  top: 0;
+  background-color: #000000;
+  top: -1.4rem;
   right: 0;
+  border: 1px solid #777;
   opacity: 1;
 }
 
