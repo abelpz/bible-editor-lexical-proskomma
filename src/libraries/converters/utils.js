@@ -5,7 +5,4 @@ export const handleSubtypeNS = (subtype) => {
     : { subtype };
 };
 
-export const pushToArray = (array, value) => {
-  array.push(value);
-  return array;
-};
+export const pushToArray = (array, value) => (() => array)(array.push(value));

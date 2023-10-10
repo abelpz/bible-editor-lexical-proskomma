@@ -1,6 +1,7 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import ScriptureNodes from "../lexical/nodes";
 import { OnChangePlugin } from "../lexical/plugins/OnChangePlugin";
@@ -16,8 +17,9 @@ function onError(error: Error) {
 
 export default function Editor() {
   /**
-   * currently useLexicalState fills lexicalState
-   *  with hardcoded data for testing purposes
+   *  currently useLexicalState fills lexicalState
+   *  with a lexical state string which is converted from
+   *  hardcoded usfm for testing purposes
    **/
   const lexicalState = useLexicalState();
 
@@ -46,6 +48,7 @@ export default function Editor() {
           ErrorBoundary={LexicalErrorBoundary}
         />
         <OnChangePlugin onChange={onChange} />
+        <HistoryPlugin />
       </div>
     </LexicalComposer>
   );
