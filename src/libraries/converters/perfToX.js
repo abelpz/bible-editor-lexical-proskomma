@@ -1,4 +1,5 @@
-import { handleSubtypeNS } from "./helpers";
+import { pushToArray, handleSubtypeNS } from "./utils";
+
 /**
  * Structure of nodes in PERF
  * @link https://github.com/Proskomma/proskomma-json-tools/tree/main/src/schema/structure/0_4_0
@@ -8,11 +9,6 @@ const PerfStrutureTypes = {
   BLOCK: "block",
   CONTENT_TEXT: "contentText",
   CONTENT_ELEMENT: "contentElement",
-};
-
-const pushToArray = (array, value) => {
-  array.push(value);
-  return array;
 };
 
 export const convertPerf = ({ perfDocument, nodeBuilder }) => {
