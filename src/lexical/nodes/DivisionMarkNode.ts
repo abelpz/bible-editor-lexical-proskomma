@@ -2,13 +2,13 @@ import { addClassNamesToElement } from "@lexical/utils";
 import { $applyNodeReplacement } from "lexical";
 import { UsfmElementNode } from "./UsfmElementNode";
 
-export class VerseNode extends UsfmElementNode {
+export class DivisionMarkNode extends UsfmElementNode {
   static getType() {
-    return "verse";
+    return "divisionmark";
   }
 
   static clone(node) {
-    return new VerseNode(node.__attributes, node.__data, node.__key);
+    return new DivisionMarkNode(node.__attributes, node.__data, node.__key);
   }
 
   constructor(attributes, data, key) {
@@ -17,7 +17,7 @@ export class VerseNode extends UsfmElementNode {
 
   static importJSON(serializedNode) {
     const { data, attributes, format, indent, direction } = serializedNode;
-    const node = $createVerseNode(attributes, data);
+    const node = $createDivisionMarkNode(attributes, data);
     node.setData(data);
     node.setAttributes(attributes);
     node.setFormat(format);
@@ -29,6 +29,7 @@ export class VerseNode extends UsfmElementNode {
   createDOM(config) {
     const element = document.createElement("span");
     const attributes = this.getAttributes();
+
     Object.keys(attributes).forEach((attKey) => {
       element.setAttribute(attKey, attributes[attKey]);
     });
@@ -36,23 +37,23 @@ export class VerseNode extends UsfmElementNode {
     return element;
   }
 
-  isInline(){
+  isInline() {
     return true;
   }
 
   exportJSON() {
     return {
       ...super.exportJSON(),
-      type: "verse",
+      type: "divisionmark",
       version: 1,
     };
   }
 }
 
-export function $createVerseNode(attributes, data) {
-  return $applyNodeReplacement(new VerseNode(attributes, data));
+export function $createDivisionMarkNode(attributes, data) {
+  return $applyNodeReplacement(new DivisionMarkNode(attributes, data));
 }
 
-export function $isVerseNode(node) {
-  return node instanceof VerseNode;
+export function $isDivisionMarkNode(node) {
+  return node instanceof DivisionMarkNode;
 }

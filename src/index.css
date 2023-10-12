@@ -70,23 +70,22 @@ button:focus-visible {
   }
 } */
 
-span.verses::before,
-span.chapter::before {
-  content: attr(data-atts-number);
+span.verses,
+span.chapter {
   position: relative;
   visibility: visible;
   display: inline-flex;
   color: rgb(242 242 242);
 }
 
-span.chapter::before {
+span.chapter {
   font-size: 1.7rem;
   vertical-align: text-top;
   font-weight: 700;
   margin-inline-end: 0.1em;
 }
 
-span.verses::before {
+span.verses {
   color: #fff;
   font-size: 0.8em;
   vertical-align: sup;

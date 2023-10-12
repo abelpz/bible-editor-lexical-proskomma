@@ -208,7 +208,10 @@ export const createPerfMap = (perf) => ({
       type: "usfmparagraph",
       version: 1,
     }),
-    verses: ({ props: perfElementProps }) => ({
+    ...((divisionMark) => ({
+      verses: divisionMark,
+      chapter: divisionMark,
+    }))(({ props: perfElementProps }) => ({
       data: perfElementProps,
       attributes: {
         "data-atts-number": perfElementProps.atts.number,
@@ -216,26 +219,23 @@ export const createPerfMap = (perf) => ({
         "data-subtype": perfElementProps.subtype,
         class: `${perfElementProps.subtype}`,
       },
+      children: [
+        {
+          detail: 0,
+          format: 0,
+          mode: "normal",
+          style: "",
+          text: perfElementProps.atts.number,
+          type: "text",
+          version: 1,
+        },
+      ],
       direction: "ltr",
       format: "",
       indent: 0,
-      type: "verse",
+      type: "divisionmark",
       version: 1,
-    }),
-    chapter: ({ props: perfElementProps }) => ({
-      data: perfElementProps,
-      attributes: {
-        "data-atts-number": perfElementProps.atts.number,
-        "data-type": perfElementProps.type,
-        "data-subtype": perfElementProps.subtype,
-        class: `${perfElementProps.subtype}`,
-      },
-      direction: "ltr",
-      format: "",
-      indent: 0,
-      type: "verse",
-      version: 1,
-    }),
+    })),
   },
 });
 
